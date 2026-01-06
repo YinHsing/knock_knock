@@ -1,20 +1,42 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Run and deploy your React app
 
-# Run and deploy your AI Studio app
+This project is a React application using Vite.
 
-This contains everything you need to run your app locally.
+## Prerequisites
 
-View your app in AI Studio: https://ai.studio/apps/drive/1QW_kUyV8-XQzgSEnChrMuRyLs6voUK-8
+- **Node.js**: You need to install Node.js to run this project. Download it from [nodejs.org](https://nodejs.org/).
 
-## Run Locally
+## Setup & Run Locally
 
-**Prerequisites:**  Node.js
+1.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
+2.  **Start the development server:**
+    ```bash
+    npm run dev
+    ```
+    Open your browser and navigate to the URL shown (usually `http://localhost:5173`).
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+3.  **Build for production:**
+    ```bash
+    npm run build
+    ```
+
+## Deployment
+
+This project is configured to automatically deploy to **GitHub Pages** using GitHub Actions.
+
+### Steps to enable deployment:
+
+1.  Push this code to a GitHub repository.
+2.  Go to the repository **Settings** > **Pages**.
+3.  Under **Build and deployment** > **Source**, select **GitHub Actions**.
+4.  The workflow defined in `.github/workflows/deploy.yml` will automatically build and deploy your app whenever you push to the `main` branch.
+
+## File Structure
+
+- `src/`: Source code
+- `.github/workflows/`: GitHub Actions configurations
+- `dist/`: Build output (created after running build)
