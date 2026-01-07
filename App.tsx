@@ -46,7 +46,7 @@ const App: React.FC = () => {
       setInitialMappingFailCount(nextFailCount);
       setStep(InteractionStep.UNRECOGNIZED);
       if (nextFailCount >= 2) {
-        setMessage("Please contact Yina");
+        setMessage("Please contact Yina!!!");
       } else {
         setMessage("Hmm... this door doesn't seem to recognize you.");
       }
@@ -139,7 +139,7 @@ const App: React.FC = () => {
   const isTransitioning = step === InteractionStep.SHOWCASE;
 
   // Get personalized message for recognized user
-  const personalizedMessage = USER_PROFILES[nameInput.toLowerCase()] || "Welcome to the gang!";
+  const personalizedMessage = USER_PROFILES[nameInput.toLowerCase()] || "Welcome to the board!";
 
   return (
     <div className="relative h-[100dvh] w-full bg-[#F9F7F2] overflow-hidden flex flex-col items-center justify-center p-[2vmin]">
@@ -147,8 +147,8 @@ const App: React.FC = () => {
       <AnimatePresence>
         {!isProfileActive && !isTransitioning && (
           <motion.div exit={{ opacity: 0 }} className="absolute inset-0 pointer-events-none opacity-[0.03] select-none">
-             <div className="absolute top-[10%] right-[10%] w-[30vmin] h-[30vmin] border-[1vmin] border-black rounded-full border-dashed rotate-12" />
-             <div className="absolute bottom-[20%] left-[5%] w-[20vmin] h-[20vmin] border-[0.5vmin] border-black rotate-[-15deg]" />
+            <div className="absolute top-[10%] right-[10%] w-[30vmin] h-[30vmin] border-[1vmin] border-black rounded-full border-dashed rotate-12" />
+            <div className="absolute bottom-[20%] left-[5%] w-[20vmin] h-[20vmin] border-[0.5vmin] border-black rotate-[-15deg]" />
           </motion.div>
         )}
       </AnimatePresence>
@@ -158,8 +158,8 @@ const App: React.FC = () => {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/95">
             <motion.div initial={{ scale: 0.8, y: 30 }} animate={{ scale: 1, y: 0 }} className="relative w-full max-w-lg bg-white border-[0.8vmin] border-black p-[5vmin] hand-drawn-border shadow-[15px_15px_0px_0px_rgba(229,62,62,1)]">
               <div className="flex flex-col items-center gap-[4vmin] text-center">
-                <div className="relative w-[40vmin] h-[40vmin] max-w-[200px] max-h-[200px] border-[1vmin] border-black hand-drawn-border-sm overflow-hidden bg-gray-100 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                  <img src={getImagePath(nameInput, 'real')} className="w-full h-full object-contain grayscale" alt="Profile" />
+                <div className="relative w-[40vmin] h-[40vmin] max-w-[200px] max-h-[200px] border-[1vmin] border-black hand-drawn-border-sm overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                  <img src={getImagePath(nameInput, 'real')} className="w-full h-full object-cover" alt="Profile" />
                 </div>
                 <h2 className="text-[5vmin] sm:text-4xl font-black italic uppercase tracking-tighter">HI, {nameInput}!</h2>
                 <p className="text-[3.5vmin] sm:text-2xl italic text-gray-800 leading-relaxed font-bold">"{personalizedMessage}"</p>
@@ -172,16 +172,16 @@ const App: React.FC = () => {
 
       <LayoutGroup>
         <div className="flex flex-col landscape:flex-row items-center justify-center w-full h-full max-w-7xl gap-[3vmin] sm:gap-[6vmin]">
-          
+
           {/* Left/Top Area: Door and Speech Bubble */}
-          <motion.div 
+          <motion.div
             layout
             className={`relative flex flex-col items-center justify-center transition-all duration-700 ease-in-out
               ${hasStarted ? 'landscape:flex-[0.5] landscape:items-end portrait:flex-shrink' : 'flex-1 items-center'}
             `}
           >
-            {knocks.map(k => <Onomatopoeia key={k.id} text="POW!" onComplete={() => removeKnock(k.id)} />)}
-            
+            {knocks.map(k => <Onomatopoeia key={k.id} text="knock knock!" onComplete={() => removeKnock(k.id)} />)}
+
             <div className={`relative flex flex-col items-center ${isProfileActive ? 'invisible' : ''}`}>
               {/* Responsive Speech Bubble Positioning */}
               <div className="absolute 
@@ -190,11 +190,11 @@ const App: React.FC = () => {
               >
                 <SpeechBubble text={message} isVisible={hasStarted} />
               </div>
-              
-              <Door 
-                step={step} 
-                onClick={handleDoorClick} 
-                revealImage={step === InteractionStep.UNRECOGNIZED ? '?' : rounds[currentRoundIdx]?.image} 
+
+              <Door
+                step={step}
+                onClick={handleDoorClick}
+                revealImage={step === InteractionStep.UNRECOGNIZED ? '?' : rounds[currentRoundIdx]?.image}
                 revealType={step === InteractionStep.UNRECOGNIZED ? 'unrecognized' : rounds[currentRoundIdx]?.type}
                 isShutterForceClosed={isShutterForceClosed}
               />
@@ -204,7 +204,7 @@ const App: React.FC = () => {
           {/* Right/Bottom Area: Input and Buttons */}
           <AnimatePresence>
             {hasStarted && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 30 }}
@@ -215,7 +215,7 @@ const App: React.FC = () => {
                   <AnimatePresence mode="wait">
                     {[InteractionStep.ASKING, InteractionStep.UNRECOGNIZED].includes(step) && (
                       <motion.div key="input-box" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="w-full flex flex-col items-center gap-[3vmin]">
-                        <input 
+                        <input
                           autoFocus type="text" placeholder="WHO'S THERE?..." value={nameInput}
                           onChange={(e) => setNameInput(e.target.value)}
                           onKeyPress={(e) => e.key === 'Enter' && handleVerifyName()}
