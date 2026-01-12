@@ -61,10 +61,16 @@ const Door: React.FC<DoorProps> = ({ step, onClick, revealImage, revealType, isS
         onClick={onClick}
         animate={
           isOpening || isZooming
-            ? { rotateY: -110, x: 20 } 
-            : isKnocking 
-              ? { x: [-10, 10, -8, 8, -4, 4, 0], rotateZ: [-2, 2, -1, 1, 0], scale: 0.97 }
-              : isIdle ? { scale: [1, 1.01, 1] } : { scale: 1 }
+            ? { rotateY: -110, x: 20, opacity: isZooming ? [1, 1, 0] : 1 } 
+            : { 
+                // 門歸位
+                rotateY: 0, 
+                // 敲門時抖動，不敲門時歸零
+                x: isKnocking ? [-10, 10, -8, 8, 0] : 0, 
+                rotateZ: isKnocking ? [-2, 2, -1, 1, 0] : 0, 
+                // 門「輕微縮放」
+                scale: isIdle ? [1, 1.01, 1] : 1 
+              }
         }
         transition={
           isOpening || isZooming ? { duration: 1.5, ease: "easeInOut" } : isIdle ? { duration: 3, repeat: Infinity } : { duration: 0.3 }

@@ -203,7 +203,7 @@ const App: React.FC = () => {
 
           {/* Right/Bottom Area: Input and Buttons */}
           <AnimatePresence>
-            {hasStarted && (
+            {hasStarted && !isProfileActive && (
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
