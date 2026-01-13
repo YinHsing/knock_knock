@@ -139,8 +139,9 @@ const App: React.FC = () => {
   const isTransitioning = step === InteractionStep.SHOWCASE;
 
   // Get personalized message for recognized user
-  const personalizedMessage = USER_PROFILES[nameInput.toLowerCase()] || "Welcome to the board!";
-
+  const rawMessage = USER_PROFILES[nameInput.toLowerCase()];
+  const personalizedMessage = `If I had to describe you in three words, they’d be ${rawMessage}` || "Welcome to the board!";
+  
   return (
     <div className="relative h-[100dvh] w-full bg-[#F9F7F2] overflow-hidden flex flex-col items-center justify-center p-[2vmin]">
       {/* Background decoration */}
@@ -162,7 +163,9 @@ const App: React.FC = () => {
                   <img src={getImagePath(nameInput, 'real')} className="w-full h-full object-cover" alt="Profile" />
                 </div>
                 <h2 className="text-[5vmin] sm:text-4xl font-black italic uppercase tracking-tighter">HI, {nameInput}!</h2>
-                <p className="text-[3.5vmin] sm:text-2xl italic text-gray-800 leading-relaxed font-bold">"{personalizedMessage}"</p>
+                <div className="w-full max-h-[25vh] overflow-y-auto no-scrollbar py-2">
+                  <p className="text-[3.5vmin] sm:text-2xl italic text-gray-800 leading-relaxed font-bold">"{personalizedMessage}"</p>
+                </div>
                 <button onClick={reset} className="w-full py-[2vmin] bg-black text-white text-[4vmin] sm:text-3xl font-black uppercase hand-drawn-border shadow-[8px_8px_0px_0px_rgba(229,62,62,1)] active:scale-95 transition-transform">START AGAIN</button>
               </div>
             </motion.div>
