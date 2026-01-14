@@ -76,33 +76,33 @@ const Door: React.FC<DoorProps> = ({ step, onClick, revealImage, revealType, isS
           isOpening || isZooming ? { duration: 1.5, ease: "easeInOut" } : isIdle ? { duration: 3, repeat: Infinity } : { duration: 0.3 }
         }
       >
-        <div className="w-full h-full bg-[#E53E3E] border-[1vmin] border-black hand-drawn-border overflow-hidden shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] relative">
+        <div className="w-full h-full bg-[#E53E3E] border-[1vmin] border-black hand-drawn-border overflow-hidden shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] relative">
           
           {/* Shutter Window */}
-          <div className="absolute top-[12%] left-1/2 -translate-x-1/2 w-[55%] h-[28%] border-[0.5vmin] border-black hand-drawn-border-sm overflow-hidden z-30 flex items-center justify-center">
-             <AnimatePresence mode='wait'>
-                {(step !== InteractionStep.IDLE && step !== InteractionStep.KNOCKING) && (
-                   <motion.img 
-                      key={revealImage || 'placeholder'}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 1.1 }}
-                      src={getImagePath(revealImage || '?', revealType || 'unrecognized')} 
-                      className="w-full h-full object-cover contrast-125"
-                      onError={(e) => { (e.target as HTMLImageElement).src = `/knock_knock/images/unrecognized`; }}
-                   />
-                )}
-             </AnimatePresence>
-             
+          <div className="absolute top-[12%] left-1/2 -translate-x-1/2 w-[55%] h-[28%] border-4 border-black hand-drawn-border-sm overflow-hidden z-30 flex items-center justify-center">
+            <AnimatePresence mode='wait'>
+              {(step !== InteractionStep.IDLE && step !== InteractionStep.KNOCKING) && (
+                <motion.img 
+                  key={revealImage || 'placeholder'}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.1 }}
+                  src={getImagePath(revealImage || '?', revealType || 'unrecognized')} 
+                  className="w-full h-full object-cover contrast-125"
+                  onError={(e) => { (e.target as HTMLImageElement).src = `/knock_knock/images/unrecognized`; }}
+                />
+              )}
+            </AnimatePresence>
+
              {/* Shutter Plate */}
-             <motion.div 
-               initial={{ x: 0 }}
-               animate={isWindowOpen ? { x: "-100%" } : { x: 0 }}
-               transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
-               className="absolute inset-0 bg-[#C53030] border-r-[0.3vmin] border-black flex items-center justify-end p-[5%] z-40"
-             >
-                <div className="w-[10%] h-[80%] bg-black/40 border-[0.5vmin] border-black rounded-[40%_60%_60%_40%/10%_40%_40%_70%]" />
-             </motion.div>
+            <motion.div 
+              initial={{ x: 0 }}
+              animate={isWindowOpen ? { x: "-100%" } : { x: 0 }}
+              transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+              className="absolute inset-0 bg-[#C53030] border-r-[0.3vmin] border-black flex items-center justify-end p-[5%] z-40"
+            >
+            <div className="w-[10%] h-[80%] bg-black/40 border-[0.5vmin] border-black rounded-[40%_60%_60%_40%/10%_40%_40%_70%]" />
+            </motion.div>
           </div>
           
           {/* Knob */}

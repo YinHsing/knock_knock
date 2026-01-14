@@ -18,7 +18,7 @@ const SpeechBubble: React.FC<SpeechBubbleProps> = ({ text, isVisible }) => {
           className="relative z-[150] w-[45vmin] max-w-[280px] min-w-[180px]"
         >
           <div className="relative bg-white border-[0.6vmin] border-black p-[3vmin] sm:p-5 hand-drawn-border-sm shadow-[10px_10px_0px_0px_rgba(0,0,0,1)]">
-            <p className="text-[3.5vmin] sm:text-2xl text-center font-black text-black leading-tight uppercase italic tracking-tighter">
+            <p className="text-[5.5vmin] sm:text-2xl text-center font-black text-black leading-tight uppercase italic tracking-tighter">
               {text}
             </p>
             {/* Peanuts style comic tail */}

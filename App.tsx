@@ -4,6 +4,8 @@ import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import Door from './components/Door';
 import SpeechBubble from './components/SpeechBubble';
 import Onomatopoeia from './components/Onomatopoeia';
+import GardenBed from './components/GardenBed';
+import Cloud from './components/cloud';
 import { InteractionStep, GameRound } from './types';
 import { INITIAL_NAMES, getImagePath, DECOY_SEEDS, USER_PROFILES } from './constants';
 
@@ -143,16 +145,18 @@ const App: React.FC = () => {
   const personalizedMessage = `If I had to describe you in three words, they’d be ${rawMessage}` || "Welcome to the board!";
   
   return (
-    <div className="relative h-[100dvh] w-full bg-[#F9F7F2] overflow-hidden flex flex-col items-center justify-center p-[2vmin]">
+    <div className="relative h-[100dvh] w-full bg-[#3bd2ea] overflow-hidden flex flex-col items-center justify-center p-[2vmin]">
       {/* Background decoration */}
-      <AnimatePresence>
+
+      <Cloud hasStarted={hasStarted} />
+      {/* <AnimatePresence>
         {!isProfileActive && !isTransitioning && (
           <motion.div exit={{ opacity: 0 }} className="absolute inset-0 pointer-events-none opacity-[0.03] select-none">
             <div className="absolute top-[10%] right-[10%] w-[30vmin] h-[30vmin] border-[1vmin] border-black rounded-full border-dashed rotate-12" />
             <div className="absolute bottom-[20%] left-[5%] w-[20vmin] h-[20vmin] border-[0.5vmin] border-black rotate-[-15deg]" />
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       <AnimatePresence>
         {isProfileActive && (
@@ -164,7 +168,7 @@ const App: React.FC = () => {
                 </div>
                 <h2 className="text-[5vmin] sm:text-4xl font-black italic uppercase tracking-tighter">HI, {nameInput}!</h2>
                 <div className="w-full max-h-[25vh] overflow-y-auto no-scrollbar py-2">
-                  <p className="text-[3.5vmin] sm:text-2xl italic text-gray-800 leading-relaxed font-bold">"{personalizedMessage}"</p>
+                  <p className="text-[5.5vmin] sm:text-2xl italic text-gray-800 leading-relaxed font-bold">"{personalizedMessage}"</p>
                 </div>
                 <button onClick={reset} className="w-full py-[2vmin] bg-black text-white text-[4vmin] sm:text-3xl font-black uppercase hand-drawn-border shadow-[8px_8px_0px_0px_rgba(229,62,62,1)] active:scale-95 transition-transform">START AGAIN</button>
               </div>
@@ -179,7 +183,8 @@ const App: React.FC = () => {
           {/* Left/Top Area: Door and Speech Bubble */}
           <motion.div
             layout
-            className={`relative flex flex-col items-center justify-center transition-all duration-700 ease-in-out
+            transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+            className={`relative flex flex-col items-center justify-center
               ${hasStarted ? 'landscape:flex-[0.5] landscape:items-end portrait:flex-shrink' : 'flex-1 items-center'}
             `}
           >
@@ -201,6 +206,8 @@ const App: React.FC = () => {
                 revealType={step === InteractionStep.UNRECOGNIZED ? 'unrecognized' : rounds[currentRoundIdx]?.type}
                 isShutterForceClosed={isShutterForceClosed}
               />
+
+              <GardenBed isTransitioning={isTransitioning} />
             </div>
           </motion.div>
 
