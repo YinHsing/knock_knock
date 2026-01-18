@@ -9,7 +9,8 @@ export enum InteractionStep {
   SUCCESS = 'SUCCESS',
   WARM_ENDING = 'WARM_ENDING',
   SHOWCASE = 'SHOWCASE',
-  PROFILE = 'PROFILE'
+  PROFILE = 'PROFILE',
+  RESETTING = 'RESETTING'
 }
 
 export interface GameRound {

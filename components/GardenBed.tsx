@@ -19,7 +19,7 @@ const GardenBed: React.FC<GardenBed> = ({ isTransitioning }) => {
         <motion.div
           key="garden-bed-decor"
           variants={sharedAnimation}
-          className="absolute -bottom-[2.5vmin] -left-[50%] -right-[50%] flex flex-col items-center pointer-events-none"
+          className="absolute -bottom-[3.5vmin] -left-[50%] -right-[50%] flex flex-col items-center pointer-events-none"
         >
           {/* grace*/}
           <div className="w-full h-[20vmin] translate-y-[5px]">

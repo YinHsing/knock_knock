@@ -20,6 +20,7 @@ const App: React.FC = () => {
   const [mistakeCount, setMistakeCount] = useState(0);
   const [initialMappingFailCount, setInitialMappingFailCount] = useState(0);
   const [isShutterForceClosed, setIsShutterForceClosed] = useState(false);
+  const [isComingFromProfile, setIsComingFromProfile] = useState(false);
 
   const handleDoorClick = () => {
     if (step !== InteractionStep.IDLE) return;
@@ -87,7 +88,7 @@ const App: React.FC = () => {
         setStep(InteractionStep.CONFIRMING_UNSURE);
       } else {
         setStep(InteractionStep.WARM_ENDING);
-        setMessage("A mysterious guest! Have a wonderful day ahead.");
+        setMessage("A mysterious guest! Have a wonderful day:))");
       }
     } else {
       setMistakeCount(0);
@@ -113,32 +114,30 @@ const App: React.FC = () => {
         setStep(InteractionStep.GAME);
         setMessage(`Is this you, ${nameInput}?`);
         setTimeout(() => setIsShutterForceClosed(false), 300);
-      } else {
-        triggerWarmEnding();
-        setIsShutterForceClosed(false);
-      }
-    }, 600);
-  };
-
-  const triggerWarmEnding = () => {
-    setStep(InteractionStep.WARM_ENDING);
-    setMessage("Well, since you're here, have a wonderful day!");
+      }}, 600);
   };
 
   const reset = () => {
-    setStep(InteractionStep.IDLE);
-    setNameInput('');
-    setCurrentRoundIdx(0);
-    setRounds([]);
-    setMistakeCount(0);
-    setInitialMappingFailCount(0);
-    setIsShutterForceClosed(false);
-    setMessage("Who's there?");
-  };
+    setIsComingFromProfile(step === InteractionStep.PROFILE);
+    setStep(InteractionStep.RESETTING);
 
-  const hasStarted = ![InteractionStep.IDLE, InteractionStep.KNOCKING].includes(step);
+    setTimeout(() => {
+      setStep(InteractionStep.IDLE);
+      setNameInput('');
+      setCurrentRoundIdx(0);
+      setRounds([]);
+      setMistakeCount(0);
+      setInitialMappingFailCount(0);
+      setIsShutterForceClosed(false);
+      setIsComingFromProfile(false);
+      setMessage("Who's there?");
+    }, 600);
+    };
+
+  const hasStarted = ![InteractionStep.IDLE, InteractionStep.KNOCKING, InteractionStep.RESETTING].includes(step);
   const isProfileActive = step === InteractionStep.PROFILE;
   const isTransitioning = step === InteractionStep.SHOWCASE;
+  const isResetting = step === InteractionStep.RESETTING;
 
   // Get personalized message for recognized user
   const rawMessage = USER_PROFILES[nameInput.toLowerCase()];
@@ -147,21 +146,20 @@ const App: React.FC = () => {
   return (
     <div className="relative h-[100dvh] w-full bg-[#3bd2ea] overflow-hidden flex flex-col items-center justify-center p-[2vmin]">
       {/* Background decoration */}
-
       <Cloud hasStarted={hasStarted} />
-      {/* <AnimatePresence>
-        {!isProfileActive && !isTransitioning && (
-          <motion.div exit={{ opacity: 0 }} className="absolute inset-0 pointer-events-none opacity-[0.03] select-none">
-            <div className="absolute top-[10%] right-[10%] w-[30vmin] h-[30vmin] border-[1vmin] border-black rounded-full border-dashed rotate-12" />
-            <div className="absolute bottom-[20%] left-[5%] w-[20vmin] h-[20vmin] border-[0.5vmin] border-black rotate-[-15deg]" />
-          </motion.div>
-        )}
-      </AnimatePresence> */}
-
       <AnimatePresence>
-        {isProfileActive && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/95">
-            <motion.div initial={{ scale: 0.8, y: 30 }} animate={{ scale: 1, y: 0 }} className="relative w-full max-w-lg bg-white border-[0.8vmin] border-black p-[5vmin] hand-drawn-border shadow-[15px_15px_0px_0px_rgba(229,62,62,1)]">
+        {(isProfileActive || (isResetting && isComingFromProfile)) && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/95">
+            <motion.div 
+              initial={{ scale: 0.8, y: 30 }}
+              animate={isResetting ? { scale: 0, opacity: 0 } : { scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{ duration: 0.5, ease: "backIn" }}
+              className="relative w-full max-w-lg bg-white border-[0.8vmin] border-black p-[5vmin] hand-drawn-border shadow-[15px_15px_0px_0px_rgba(229,62,62,1)]">
               <div className="flex flex-col items-center gap-[4vmin] text-center">
                 <div className="relative w-[40vmin] h-[40vmin] max-w-[200px] max-h-[200px] border-[1vmin] border-black hand-drawn-border-sm overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                   <img src={getImagePath(nameInput, 'real')} className="w-full h-full object-cover" alt="Profile" />
@@ -170,7 +168,14 @@ const App: React.FC = () => {
                 <div className="w-full max-h-[25vh] overflow-y-auto no-scrollbar py-2">
                   <p className="text-[5.5vmin] sm:text-2xl italic text-gray-800 leading-relaxed font-bold">"{personalizedMessage}"</p>
                 </div>
-                <button onClick={reset} className="w-full py-[2vmin] bg-black text-white text-[4vmin] sm:text-3xl font-black uppercase hand-drawn-border shadow-[8px_8px_0px_0px_rgba(229,62,62,1)] active:scale-95 transition-transform">START AGAIN</button>
+                {/* <button onClick={reset} className="w-full py-[2vmin] bg-black text-white text-[4vmin] sm:text-3xl font-black uppercase hand-drawn-border shadow-[8px_8px_0px_0px_rgba(229,62,62,1)] active:scale-95 transition-transform">START AGAIN</button> */}
+                <motion.button 
+                  onClick={reset}
+                  animate={isResetting ? { scale: 0 } : { scale: 1 }}
+                  className="w-full py-[3vmin] mt-[1vmin] bg-black text-white text-[5vmin] sm:text-3xl font-black uppercase hand-drawn-border shadow-[8px_8px_0px_0px_rgba(229,62,62,1)] transition-transform"
+                >
+                  PLAY AGAIN
+                </motion.button>
               </div>
             </motion.div>
           </motion.div>
@@ -179,7 +184,6 @@ const App: React.FC = () => {
 
       <LayoutGroup>
         <div className="flex flex-col landscape:flex-row items-center justify-center w-full h-full max-w-7xl gap-[3vmin] sm:gap-[6vmin]">
-
           {/* Left/Top Area: Door and Speech Bubble */}
           <motion.div
             layout
@@ -190,7 +194,7 @@ const App: React.FC = () => {
           >
             {knocks.map(k => <Onomatopoeia key={k.id} text="knock knock!" onComplete={() => removeKnock(k.id)} />)}
 
-            <div className={`relative flex flex-col items-center ${isProfileActive ? 'invisible' : ''}`}>
+            <div className={`relative flex flex-col items-center ${(isProfileActive || isResetting)  ? 'invisible' : ''}`}>
               {/* Responsive Speech Bubble Positioning */}
               <div className="absolute 
                 portrait:top-[-15vmin] portrait:left-1/2 portrait:-translate-x-1/2 
@@ -213,13 +217,14 @@ const App: React.FC = () => {
 
           {/* Right/Bottom Area: Input and Buttons */}
           <AnimatePresence>
-            {hasStarted && !isProfileActive && (
+            {hasStarted && (
               <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 30 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="flex flex-col items-center justify-center w-full max-w-[85vw] sm:max-w-md landscape:flex-[0.5] landscape:items-start portrait:mt-[4vmin] z-40"
+                layout
+                initial={{ opacity: 0, x: 30, scale: 0.9 }}
+                animate={{ opacity: 1, x: 0, scale: 1  }}
+                exit={{ opacity: 0, x: 0, scale: 0.5 }}
+                transition={{ duration: 0.5, ease: "backIn" }}
+                className="flex flex-col items-center justify-center w-full max-w-[85vw] sm:max-w-md landscape:flex-[0.5] landscape:items-start portrait:mt-[4vmin] portrait:h-[25vh] portrait:min-h-[150px] z-40"
               >
                 <div className="w-full flex flex-col gap-[3vmin]">
                   <AnimatePresence mode="wait">
@@ -237,16 +242,24 @@ const App: React.FC = () => {
                       </motion.div>
                     )}
 
-                    {[InteractionStep.GAME, InteractionStep.CONFIRMING_UNSURE].includes(step) && !isShutterForceClosed && (
-                      <motion.div key="game-ui" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex gap-[3vmin] w-full">
+                    {[InteractionStep.GAME, InteractionStep.CONFIRMING_UNSURE].includes(step) && !isShutterForceClosed && ( 
+                      <motion.div 
+                        key="game-ui" 
+                        initial={{ opacity: 0, scale: 0.95 }} 
+                        animate={{ opacity: 1, scale: 1 }} 
+                        exit={{ opacity: 0, scale: 0.95 }} 
+                        transition={{ duration:0.5, ease:"backOut", delay: 0.3 }} 
+                        className="flex gap-[3vmin] w-full">
                         <button onClick={() => handleResponse('yes')} className="flex-1 py-[3vmin] bg-green-500 text-white text-[6vmin] sm:text-4xl font-black border-[0.6vmin] border-black hand-drawn-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-none transition-all uppercase">YES</button>
                         <button onClick={() => handleResponse('no')} className="flex-1 py-[3vmin] bg-red-500 text-white text-[6vmin] sm:text-4xl font-black border-[0.6vmin] border-black hand-drawn-border shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:shadow-none transition-all uppercase">NO</button>
                       </motion.div>
                     )}
 
                     {step === InteractionStep.WARM_ENDING && (
-                      <motion.div key="ending-ui" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full">
-                        <button onClick={reset} className="w-full py-[3vmin] bg-black text-white text-[4vmin] sm:text-3xl font-black uppercase hand-drawn-border shadow-[10px_10px_0px_0px_rgba(229,62,62,1)] active:scale-95 transition-all">RESTART</button>
+                      <motion.div key="ending-ui" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ scale: 0, opacity: 0 }}  className="w-full">
+                        <button onClick={reset}
+                          className="w-full py-[3vmin] bg-black text-white text-[4vmin] sm:text-3xl font-black uppercase hand-drawn-border shadow-[10px_10px_0px_0px_rgba(229,62,62,1)] active:scale-95 transition-all"
+                        >RESTART</button>
                       </motion.div>
                     )}
                   </AnimatePresence>

@@ -21,7 +21,6 @@ const SpeechBubble: React.FC<SpeechBubbleProps> = ({ text, isVisible }) => {
             <p className="text-[5.5vmin] sm:text-2xl text-center font-black text-black leading-tight uppercase italic tracking-tighter">
               {text}
             </p>
-            {/* Peanuts style comic tail */}
             <div 
               className="absolute portrait:-bottom-[3vmin] portrait:right-[5vmin] 
               landscape:bottom-1/2 landscape:-left-[4vmin] landscape:translate-y-1/2

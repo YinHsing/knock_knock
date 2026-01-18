@@ -17,6 +17,7 @@ const Door: React.FC<DoorProps> = ({ step, onClick, revealImage, revealType, isS
   const isKnocking = step === InteractionStep.KNOCKING;
   const isOpening = [InteractionStep.SUCCESS, InteractionStep.SHOWCASE].includes(step);
   const isZooming = step === InteractionStep.SHOWCASE;
+  const isResetting = step === InteractionStep.RESETTING;
   
   const isWindowOpen = !isShutterForceClosed && [
     InteractionStep.GAME, 
@@ -34,8 +35,25 @@ const Door: React.FC<DoorProps> = ({ step, onClick, revealImage, revealType, isS
         height: 'min(75vmin, 400px)',
         aspectRatio: '2 / 3'
       }}
-      animate={isZooming ? { scale: 15, opacity: [1, 1, 0] } : { scale: 1, opacity: 1 }}
-      transition={isZooming ? { duration: 1.8, ease: "circIn" } : { duration: 0.5 }}
+      initial={{ scale: 0, opacity: 0 }}
+      animate={
+        isZooming 
+        ? { scale: 15, opacity: [1, 1, 0] } 
+        : isResetting
+          ? { scale: 0, opacity: 0 }
+          : isIdle 
+            ? { scale: [1, 1.015, 1], rotate: [0, 0.2, 0, -0.2, 0], opacity: 1 } 
+            : { scale: 1, rotate: 0, opacity: 1 }
+    }
+      transition={
+        isZooming 
+          ? { duration: 1.8, ease: "circIn" } 
+          : isResetting
+            ? { duration: 0.5, ease: "backIn" }
+            : isIdle 
+              ? { scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }, opacity: { duration: 0.5 } } 
+              : { duration: 0.8, ease: "circOut" }
+      }
     >
       {isIdle && (
         <motion.div animate={{ y: [0, -5, 0], opacity: [0.4, 0.8, 0.4] }} transition={{ duration: 2, repeat: Infinity }} className="absolute -top-[6vmin] text-[4vmin] sm:text-2xl font-black italic text-black/60 tracking-wider">
@@ -69,11 +87,11 @@ const Door: React.FC<DoorProps> = ({ step, onClick, revealImage, revealType, isS
                 x: isKnocking ? [-10, 10, -8, 8, 0] : 0, 
                 rotateZ: isKnocking ? [-2, 2, -1, 1, 0] : 0, 
                 // 門「輕微縮放」
-                scale: isIdle ? [1, 1.01, 1] : 1 
+                scale: isIdle ? [1, 1.05, 1] : 1 
               }
         }
         transition={
-          isOpening || isZooming ? { duration: 1.5, ease: "easeInOut" } : isIdle ? { duration: 3, repeat: Infinity } : { duration: 0.3 }
+          isOpening || isZooming ? { duration: 2, ease: "easeInOut" } : isIdle ? { duration: 3, repeat: Infinity } : { duration: 0.3 }
         }
       >
         <div className="w-full h-full bg-[#E53E3E] border-[1vmin] border-black hand-drawn-border overflow-hidden shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] relative">
@@ -81,7 +99,7 @@ const Door: React.FC<DoorProps> = ({ step, onClick, revealImage, revealType, isS
           {/* Shutter Window */}
           <div className="absolute top-[12%] left-1/2 -translate-x-1/2 w-[55%] h-[28%] border-4 border-black hand-drawn-border-sm overflow-hidden z-30 flex items-center justify-center">
             <AnimatePresence mode='wait'>
-              {(step !== InteractionStep.IDLE && step !== InteractionStep.KNOCKING) && (
+              {(step !== InteractionStep.IDLE && step !== InteractionStep.KNOCKING && step !== InteractionStep.RESETTING) && (
                 <motion.img 
                   key={revealImage || 'placeholder'}
                   initial={{ opacity: 0, scale: 0.8 }}
