@@ -144,8 +144,9 @@ const App: React.FC = () => {
   const personalizedMessage = `If I had to describe you in three words, they’d be ${rawMessage}` || "Welcome to the board!";
   
   return (
-    <div className="relative h-[100dvh] w-full bg-[#3bd2ea] overflow-hidden flex flex-col items-center justify-center p-[2vmin]">
+    <div className="relative h-[100dvh] w-full safe-layout bg-[#3bd2ea] overflow-hidden flex flex-col items-center justify-center p-[2vmin]">
       {/* Background decoration */}
+      <div className="h-[20dvh] sm:h-[10dvh]" />
       <Cloud hasStarted={hasStarted} />
       <AnimatePresence>
         {(isProfileActive || (isResetting && isComingFromProfile)) && (
@@ -269,13 +270,6 @@ const App: React.FC = () => {
           </AnimatePresence>
         </div>
       </LayoutGroup>
-
-      {/* Ground Decoration */}
-      <div className="fixed bottom-0 left-0 w-full h-[5dvh] pointer-events-none opacity-20">
-        <svg width="100%" height="100%" viewBox="0 0 1000 100" preserveAspectRatio="none">
-          <path d="M0 80 Q 250 65 500 85 T 1000 75" stroke="black" strokeWidth="4" fill="none" vectorEffect="non-scaling-stroke" />
-        </svg>
-      </div>
     </div>
   );
 };
