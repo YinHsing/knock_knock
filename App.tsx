@@ -38,7 +38,7 @@ const App: React.FC = () => {
   };
 
   const handleVerifyName = () => {
-    const processedName = nameInput.replace(/\s+/g, '').toLowerCase();
+    const processedName = nameInput.trim().toLowerCase();
     if (!processedName) return;
     const isMatched = INITIAL_NAMES.includes(processedName);
     if (isMatched) {
@@ -154,7 +154,7 @@ const App: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/95">
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/95 overflow-y-auto scrollbar-hide">
             <motion.div 
               initial={{ scale: 0.8, y: 30 }}
               animate={isResetting ? { scale: 0, opacity: 0 } : { scale: 1, y: 0, opacity: 1 }}
@@ -169,7 +169,6 @@ const App: React.FC = () => {
                 <div className="w-full max-h-[25vh] overflow-y-auto no-scrollbar py-2">
                   <p className="text-[5.5vmin] sm:text-2xl italic text-gray-800 leading-relaxed font-bold">"{personalizedMessage}"</p>
                 </div>
-                {/* <button onClick={reset} className="w-full py-[2vmin] bg-black text-white text-[4vmin] sm:text-3xl font-black uppercase hand-drawn-border shadow-[8px_8px_0px_0px_rgba(229,62,62,1)] active:scale-95 transition-transform">START AGAIN</button> */}
                 <motion.button 
                   onClick={reset}
                   animate={isResetting ? { scale: 0 } : { scale: 1 }}
