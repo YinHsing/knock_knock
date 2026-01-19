@@ -84,11 +84,11 @@ const App: React.FC = () => {
         setMessage("YOU sure about that?");
         setStep(InteractionStep.CONFIRMING_UNSURE);
       } else if (nextMistakeCount === 2) {
-        setMessage("Wait... Really? Take another look.");
+        setMessage("Wait... Seriously?");
         setStep(InteractionStep.CONFIRMING_UNSURE);
       } else {
         setStep(InteractionStep.WARM_ENDING);
-        setMessage("A mysterious guest! Have a wonderful day:))");
+        setMessage("Hi, mysterious guest!");
       }
     } else {
       setMistakeCount(0);
@@ -154,7 +154,8 @@ const App: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/95 overflow-y-auto scrollbar-hide">
+            className="fixed inset-0 z-[200] p-4 bg-black/95 overflow-y-auto scrollbar-hide">
+            <div className="min-h-full w-full flex items-center justify-center p-8 sm:p-12 my-auto">
             <motion.div 
               initial={{ scale: 0.8, y: 30 }}
               animate={isResetting ? { scale: 0, opacity: 0 } : { scale: 1, y: 0, opacity: 1 }}
@@ -178,6 +179,7 @@ const App: React.FC = () => {
                 </motion.button>
               </div>
             </motion.div>
+          </div>
           </motion.div>
         )}
       </AnimatePresence>
